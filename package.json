@@ -1,0 +1,33 @@
+{
+  "name": "forex-alert-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/lertumpai/forex-alert-backend.git",
+  "author": "ninew <new-sorawit@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel src --out-dir build",
+    "start:prod": "node ./build/server.js",
+    "dev": "env-cmd -f ./environment/.development nodemon --exec babel-node ./src/server.js --watch ./src"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dayjs": "^1.10.5",
+    "env-cmd": "^10.1.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.11"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/eslint-parser": "^7.14.3",
+    "@babel/node": "^7.14.2",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/register": "^7.13.16",
+    "nodemon": "^2.0.7"
+  }
+}
