@@ -18,8 +18,10 @@
     "dayjs": "^1.10.5",
     "env-cmd": "^10.1.0",
     "express": "^4.17.1",
+    "finnhub": "^1.2.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.11"
+    "mongoose": "^5.12.11",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
