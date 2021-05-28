@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  app:
+    image: lertumpai/forex-alert-backend
+    restart: always
+    container_name: forex_alert_backend
+    environment:
+      - NODE_ENV=production
+      - PRIVATE_KEY=n@e#w$f%a^r&m*m(e)m_o+r1i2z3e4567890
+      - MONGO_URI=mongodb://localhost:27017/forex_alert
+      - COOKIE_SECURE=true
+
+    ports:
+      - 5000:5000
