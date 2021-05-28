@@ -11,6 +11,7 @@
     "dev": "env-cmd -f ./environment/.development nodemon --exec babel-node ./src/server.js --watch ./src"
   },
   "dependencies": {
+    "@line/bot-sdk": "^7.3.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",

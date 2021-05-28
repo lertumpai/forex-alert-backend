@@ -3,8 +3,12 @@ import express from 'express'
 const router = express.Router()
 
 import { verifyToken } from '../user/authentication/token'
-import { Alert } from '../../database/mongo/alert'
 import { startOfMonth, endOfMonth } from '../../utils/date'
+import { pushMessage } from '../../utils/line'
+
+import { User } from '../../database/mongo/user'
+import { Product } from '../../database/mongo/product'
+import { Alert } from '../../database/mongo/alert'
 
 router.get('/check', (req, res) => {
   res.json('Alert is ready')
@@ -65,6 +69,18 @@ router.delete('/:id', verifyToken, async (req, res, next) => {
   try {
     const { id } = req.params
     await Alert.delete(id)
+    res.status(204).end()
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.post('/alert', verifyToken, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id)
+    const alert = await Alert.findById('60b08e46514d9b3f8e57d375')
+    const product = await Product.findById(alert.productId)
+    await pushMessage({ user, product, alert })
     res.status(204).end()
   } catch (e) {
     next(e)
