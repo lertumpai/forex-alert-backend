@@ -4,51 +4,83 @@ import Dao from '../dao'
 import { NOT_FOUND_ERROR } from '../../../error'
 import { now } from '../../../utils/date'
 
-const ProfileSchema = new mongoose.Schema({
-  name: String,
-  birthday: Date,
-  status: String,
-  image: { type: mongoose.Types.ObjectId, ref: 'UploadProfile' },
-}, { _id: false })
-
-const UserSchema = new mongoose.Schema({
-  username: { type: String, unique: true },
-  password: String,
-  active: { type: Boolean, default: true },
-  line_access_token: String,
-  line_user_id: String,
+const AlertSchema = new mongoose.Schema({
+  price: String,
+  condition: {
+    type: String,
+    enum: ['gte', 'lte']
+  },
+  productId: { type: mongoose.Types.ObjectId, ref: 'Product' },
+  createdBy: { type: mongoose.Types.ObjectId, ref: 'User' },
   createdAt: Date,
-  updatedAt: Date,
-  deletedAt: Date,
+  alertedAt: Date,
 })
 
-const Alert = mongoose.model('User', UserSchema)
+AlertSchema.index({ productId: 1, alertedAt: 1, createdAt: 1 })
+AlertSchema.index({ createdBy: 1, alertedAt: 1, createdAt: 1 })
+AlertSchema.index({ createdBy: 1, createdAt: 1, alertedAt: 1 })
 
-export default class UserClass extends Dao {
+const Alert = mongoose.model('Alert', AlertSchema)
+
+export default class AlertClass extends Dao {
   constructor() {
     super(Alert)
   }
 
-  findByUsername(username) {
-    return Alert.findOne({ username })
-  }
+  count({ createdBy, isExcludeAlert = true, from, to }) {
+    let prepareFilter = {}
 
-  create({ username, password }) {
-    const date = now()
-    return Alert.create({ username, password, createdAt: date, updatedAt: date })
-  }
-
-  async updateProfile(id, { line_access_token, line_user_id }) {
-    const user = await Alert.findById(id)
-
-    if (!user) {
-      throw new NOT_FOUND_ERROR('user')
+    if (createdBy) {
+      prepareFilter = { ...prepareFilter, createdBy }
     }
 
-    user.line_user_id = line_user_id || user.line_user_id
-    user.line_access_token = line_access_token || user.line_access_token
-    user.updated_time = now()
+    if (isExcludeAlert) {
+      prepareFilter = { ...prepareFilter, alertedAt: { $eq: null } }
+    }
 
-    return user.save()
+    if (!!from && !!to) {
+      prepareFilter = { ...prepareFilter, createdAt: { $gte: from, $lte: to } }
+    }
+
+    return Alert.countDocuments(prepareFilter)
+  }
+
+  findAlert({ createdBy, productId, isExcludeAlert = true }) {
+    let prepareFilter = {}
+
+    if (createdBy) {
+      prepareFilter = { ...prepareFilter, createdBy }
+    }
+
+    if (productId) {
+      prepareFilter = { ...prepareFilter, productId }
+    }
+
+    if (isExcludeAlert) {
+      prepareFilter = { ...prepareFilter, alertedAt: { $eq: null } }
+    }
+
+    return Alert.find(prepareFilter, null, { createdAt: 1 })
+  }
+
+  create({ price, condition, createdBy, productId }) {
+    const date = now()
+    return Alert.create({ price, condition, createdBy, productId, createdAt: date })
+  }
+
+  async success(id) {
+    const alert = await Alert.findById(id)
+
+    if (!alert) {
+      throw new NOT_FOUND_ERROR(`alert ${id}`)
+    }
+
+    alert.alertedAt = now()
+
+    return alert.save()
+  }
+
+  delete(id) {
+    return Alert.deleteOne({ _id: id })
   }
 }

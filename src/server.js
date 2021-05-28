@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 
 import User from './domain/user'
 import Product from './domain/product'
+import Alert from './domain/alert'
 
 import { onError } from './error'
 import './database/mongo/connection'
@@ -29,6 +30,7 @@ app.get('/check', (req, res) => {
 
 app.use('/users', User)
 app.use('/products', Product)
+app.use('/alerts', Alert)
 
 app.use(onError)
 

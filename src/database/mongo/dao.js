@@ -7,6 +7,10 @@ export default class Dao {
     return id ? this.model.findById(id) : null
   }
 
+  findAll() {
+    return this.model.find()
+  }
+
   async queryAfterBeforeLimit(filter, { after, before, limit = 10, sortBy = '_id', order = 'DESC' }) {
     let prepareFilter = { ...filter }
     let prepareOrder = order
