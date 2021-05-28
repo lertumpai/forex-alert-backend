@@ -6,6 +6,7 @@ import { now } from '../../../utils/date'
 const ProductSchema = new mongoose.Schema({
   name: { type: String, unique: true },
   symbol: { type: String, unique: true },
+  resultSymbol: { type: String, unique: true },
   createdAt: Date,
 })
 
@@ -16,9 +17,13 @@ export default class ProductClass extends Dao {
     super(Product)
   }
 
-  create({ name, symbol }) {
+  findByResultSymbol(resultSymbol) {
+    return Product.findOne({ resultSymbol })
+  }
+
+  create({ name, symbol, resultSymbol }) {
     const date = now()
-    return Product.create({ name, symbol, createdAt: date })
+    return Product.create({ name, symbol, resultSymbol, createdAt: date })
   }
 
   async delete(id) {

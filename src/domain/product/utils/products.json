@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Gold",
+    "symbol": "OANDA:XAU_USD",
+    "resultSymbol": "OANDA:XAU_USD"
+  },
+  {
+    "name": "Nasda100",
+    "symbol": "^NDX",
+    "resultSymbol": "OANDA:NAS100_USD"
+  },
+  {
+    "name": "BITCOIN",
+    "symbol": "BINANCE:BTCUSDT",
+    "resultSymbol": "BINANCE:BTCUSDT"
+  }
+]

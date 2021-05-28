@@ -16,10 +16,10 @@ router.get('/', verifyToken, async (req, res) => {
 })
 
 router.post('/', verifyToken, async (req, res, next) => {
-  const { name, symbol } = req.body
+  const products = req.body
   try {
-    const product = await Product.create({ name, symbol })
-    res.json(product)
+    const newProducts = await Promise.all(products.map(Product.create))
+    res.json(newProducts)
   } catch (e) {
     next(e)
   }
