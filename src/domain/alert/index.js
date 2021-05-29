@@ -5,7 +5,6 @@ const router = express.Router()
 import { verifyToken } from '../user/authentication/token'
 import { startOfMonth, endOfMonth } from '../../utils/date'
 
-import { User } from '../../database/mongo/user'
 import { Product } from '../../database/mongo/product'
 import { Alert } from '../../database/mongo/alert'
 
@@ -30,7 +29,16 @@ router.get('/conditions', (req, res) => {
 router.get('/', verifyToken, async (req, res) => {
   const { user } = req
   const alerts = await Alert.findAlert({ createdBy: user.id })
-  res.json(alerts)
+  const alertWithProducts = await Promise.all(alerts.map(async alert => {
+    const product = await Product.findById(alert.productId)
+    return {
+      id: alert.id,
+      price: alert.price,
+      condition: alert.condition,
+      productName: product.name,
+    }
+  }))
+  res.json(alertWithProducts)
 })
 
 router.get('/count_alert', verifyToken, async (req, res) => {
