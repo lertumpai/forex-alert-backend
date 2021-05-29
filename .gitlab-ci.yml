@@ -19,7 +19,7 @@ build:
   script:
     - docker build --no-cache
       --tag asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:$VERSION
-      --tag asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:latest
+      --tag asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:latest .
     - docker push asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:$VERSION
     - docker push asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:latest
 
