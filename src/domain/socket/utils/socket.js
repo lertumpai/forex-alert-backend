@@ -1,9 +1,4 @@
-import Redis from 'ioredis'
-
-const redis = new Redis({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-})
+import redis from '../../../database/redis/connnection'
 
 import { Product } from '../../../database/mongo/product'
 import { Alert } from '../../../database/mongo/alert'

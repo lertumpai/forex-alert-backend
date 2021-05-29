@@ -3,6 +3,7 @@ import request from 'request'
 
 const router = express.Router()
 
+import redis from '../../database/redis/connnection'
 import { verifyToken } from '../user/authentication/token'
 import { Product } from '../../database/mongo/product'
 
@@ -23,6 +24,12 @@ router.post('/', verifyToken, async (req, res, next) => {
   } catch (e) {
     next(e)
   }
+})
+
+router.get('/price', verifyToken, async (req, res) => {
+  const { product } = req.query
+  const price = await redis.hget('products', product)
+  res.json({ price })
 })
 
 router.delete('/:id', verifyToken, async (req, res, next) => {
