@@ -3,7 +3,7 @@ import express from 'express'
 const router = express.Router()
 
 import { verifyToken } from '../user/authentication/token'
-import { subscribeAll, unsubscribeAll, startSocket} from './utils/socket'
+import { subscribeAll, unsubscribeAll, startSocket, job } from './utils/socket'
 
 let isStart = false
 
@@ -32,6 +32,7 @@ router.post('/start', verifyToken, async (req, res) => {
 
   if (!isStart) {
     startSocket(finnhub.socket)
+    job()
     isStart = true
   }
 

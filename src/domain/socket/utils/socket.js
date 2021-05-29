@@ -1,3 +1,10 @@
+import Redis from 'ioredis'
+
+const redis = new Redis({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+})
+
 import { Product } from '../../../database/mongo/product'
 import { Alert } from '../../../database/mongo/alert'
 import { User } from '../../../database/mongo/user'
@@ -5,7 +12,7 @@ import { User } from '../../../database/mongo/user'
 import { pushMessage } from '../../../utils/line'
 
 function log(data) {
-  console.log(`${new Date().toISOString()}: ${data.s} = ${data.p} at ${new Date(data.t)}`)
+  console.log(`${new Date().toISOString()}: ${data[0]} = ${data[1]}`)
 }
 
 export async function subscribeAll(socket) {
@@ -35,12 +42,11 @@ function comparePrice(nowPrice, condition, alertPrice) {
 
 async function checkAndPushMessage(data) {
   log(data)
-  const { s, p } = data
-  const product = await Product.findByResultSymbol(s)
+  const product = await Product.findByResultSymbol(data[0])
   const alerts = await Alert.findAlert({ productId: product.id })
   await Promise.all(alerts.map(async alert => {
     const { price, condition, createdBy } = alert
-    if (comparePrice(p, condition, price)) {
+    if (comparePrice(data[1], condition, price)) {
       const user = await User.findById(createdBy)
       await pushMessage({ user, product, alert })
       await Alert.success(alert.id)
@@ -48,11 +54,18 @@ async function checkAndPushMessage(data) {
   }))
 }
 
+export function job() {
+  setInterval(async () => {
+    const products = await redis.hgetall('products')
+    await Promise.all(Object.entries(products).map(checkAndPushMessage))
+  }, 1000)
+}
+
 export function startSocket(socket) {
   socket.on('message', async payload => {
     const data = JSON.parse(payload).data
     if (data) {
-      await Promise.all(data.map(checkAndPushMessage))
+      await Promise.all(data.map(({ s, p }) => redis.hset('products', s, p)))
     }
   })
 }
