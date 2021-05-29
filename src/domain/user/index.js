@@ -2,7 +2,7 @@ import express from 'express'
 const router = express.Router()
 
 import { register, login } from './authentication'
-import { UNAUTHORIZED_ERROR } from '../../error'
+import { UNAUTHORIZED_ERROR, TOKEN_INVALID_ERROR } from '../../error'
 import { getToken, verifyToken } from './authentication/token'
 import { User } from '../../database/mongo/user'
 
@@ -21,6 +21,7 @@ router.get('/', verifyToken, async (req, res) => {
 router.patch('/', verifyToken, async (req, res, next) => {
   const { id } = req.user
   const { line_access_token, line_user_id } = req.body
+
   try {
     const user = await User.updateProfile(id, { line_access_token, line_user_id })
     res.json(user)
