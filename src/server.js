@@ -8,6 +8,7 @@ import Product from './domain/product'
 import Alert from './domain/alert'
 import Socket from './domain/socket'
 
+import pkg from '../package'
 import { onError } from './error'
 import './database/mongo/connection'
 
@@ -43,7 +44,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/check', (req, res) => {
-  res.json('Server is ready')
+  res.json(`Server is ready ${pkg.version}`)
 })
 
 app.use('/users', User)
