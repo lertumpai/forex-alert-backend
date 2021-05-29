@@ -58,7 +58,7 @@ export function job() {
   setInterval(async () => {
     const products = await redis.hgetall('products')
     await Promise.all(Object.entries(products).map(checkAndPushMessage))
-  }, 1000)
+  }, Number(process.env.JOB_TIME) || 1000)
 }
 
 export function startSocket(socket) {
