@@ -1,0 +1,40 @@
+image: node:lts
+
+stages:
+  - build
+  - deploy
+
+build:
+  services:
+    - name: docker:19.03.13-dind
+  image: docker:19.03.13
+  only:
+    refs:
+      - build
+      - deploy
+  stage: build
+  before_script:
+    - base64 -d $GCP_SA_KEY | docker login -u _json_key --password-stdin https://asia.gcr.io
+    - export VERSION=$(cat package.json | grep version | head -1 | sed 's/[version,",:]//g' | tr -d [:space:])
+  script:
+    - docker build --no-cache
+      --tag asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:$VERSION
+      --tag asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:latest
+    - docker push asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:$VERSION
+    - docker push asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:latest
+
+deploy:
+  services:
+    - name: docker:19.03.13-dind
+  image: google/cloud-sdk
+  only:
+    refs:
+      - deploy
+  stage: deploy
+  before_script:
+    - base64 -d $GCP_SA_KEY > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud container clusters get-credentials $GCP_CLUSTER_NAME --zone $GCP_CLUSTER_ZONE --project $GCP_PROJECT_ID
+    - export VERSION=$(cat package.json | grep version | head -1 | sed 's/[version,",:]//g' | tr -d [:space:])
+  script:
+    - kubectl set image deployment/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=asia.gcr.io/$GCP_PROJECT_ID/$IMAGE_NAME:$VERSION --record --namespace=forex-alert

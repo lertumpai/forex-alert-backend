@@ -19,3 +19,14 @@ api /socket/unsubscribe
 3. unsubscribe all
 api /socket/subscribe
 ```
+
+# Git lab Ci variables
+```
+GCP_SA_KEY
+GCP_PROJECT_ID
+IMAGE_NAME
+SERVER_URL
+GCP_CLUSTER_NAME
+GCP_CLUSTER_ZONE
+DEPLOYMENT_NAME
+```
