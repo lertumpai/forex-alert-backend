@@ -4,6 +4,10 @@ import { User } from '../../../database/mongo/user'
 
 import { pushMessage } from '../../../utils/line'
 
+function log(data) {
+  console.log(`${new Date().toISOString()}: ${data.s} = ${data.p} at ${new Date(data.t)}`)
+}
+
 export async function subscribeAll(socket) {
   const products = await Product.findAll()
   return products.forEach(product => {
@@ -30,6 +34,7 @@ function comparePrice(nowPrice, condition, alertPrice) {
 }
 
 async function checkAndPushMessage(data) {
+  log(data)
   const { s, p } = data
   const product = await Product.findByResultSymbol(s)
   const alerts = await Alert.findAlert({ productId: product.id })
