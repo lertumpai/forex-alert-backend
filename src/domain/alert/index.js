@@ -12,17 +12,16 @@ router.get('/check', (req, res) => {
   res.json('Alert is ready')
 })
 
+const conditions = [{
+  id: 1,
+  symbol: '>=',
+  value: 'gte',
+},{
+  id: 2,
+  symbol: '<=',
+  value: 'lte',
+}]
 router.get('/conditions', (req, res) => {
-  const conditions = [{
-    id: 1,
-    symbol: '>=',
-    value: 'gte',
-  },{
-    id: 2,
-    symbol: '<=',
-    value: 'lte',
-  }]
-
   res.json(conditions)
 })
 
@@ -34,7 +33,7 @@ router.get('/', verifyToken, async (req, res) => {
     return {
       id: alert.id,
       price: alert.price,
-      condition: alert.condition,
+      condition: conditions.filter(condition => condition.value === alert.condition)[0]['symbol'],
       productName: product.name,
     }
   }))
