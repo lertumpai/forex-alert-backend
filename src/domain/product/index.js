@@ -27,9 +27,10 @@ router.post('/', verifyToken, async (req, res, next) => {
 })
 
 router.get('/price', verifyToken, async (req, res) => {
-  const { product } = req.query
-  const price = await redis.hget('products', product)
-  res.json({ price })
+  const { productId } = req.query
+  const product = await Product.findById(productId)
+  const price = await redis.hget('products', product.resultSymbol)
+  res.json({ price, name: product.name, id: productId })
 })
 
 router.delete('/:id', verifyToken, async (req, res, next) => {
