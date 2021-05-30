@@ -36,7 +36,7 @@ function comparePrice(nowPrice, condition, alertPrice) {
 }
 
 async function checkAndPushMessage(data) {
-  log(data)
+  // log(data)
   const product = await Product.findByResultSymbol(data[0])
   const alerts = await Alert.findAlert({ productId: product.id })
   await Promise.all(alerts.map(async alert => {
@@ -57,6 +57,7 @@ export function job() {
 }
 
 export function startSocketProductPrices(socket) {
+  console.log('start socketaa')
   socket.on('message', async payload => {
     const data = JSON.parse(payload).data
     if (data) {

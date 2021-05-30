@@ -18,9 +18,8 @@ const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
 
 socket.on('open', () => {
   console.log('Open Socket')
-  startSocketProductPrices(socket)
-  job()
 })
+startSocketProductPrices(socket)
 
 const app = express()
 const port = 5000
