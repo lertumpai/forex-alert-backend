@@ -10,7 +10,7 @@ import Jobs from './domain/jobs'
 
 import pkg from '../package'
 import { onError } from './error'
-import { subscribeAndStartSocketProductPrice, startQueueProcess } from './domain/jobs/utils/jobs'
+import { subscribeAndStartSocketProductPrice, startQueueProcess, task } from './domain/jobs/utils/jobs'
 import './database/mongo/connection'
 
 const WebSocket = require('ws')
@@ -41,6 +41,7 @@ const arena = Arena({
 socket.on('open', () => {
   console.log('Open Socket')
   subscribeAndStartSocketProductPrice(socket)
+  task.start()
 })
 
 startQueueProcess()
