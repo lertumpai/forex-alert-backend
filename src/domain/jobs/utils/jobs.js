@@ -9,8 +9,8 @@ import { User } from '../../../database/mongo/user'
 
 import { pushMessage } from '../../../utils/line'
 
-function log({ price, productResultSymbol }) {
-  console.log(`${new Date().toISOString()}: ${productResultSymbol} = ${price}`)
+function log({ nowPrice, productResultSymbol }) {
+  console.log(`${new Date().toISOString()}: ${productResultSymbol} = ${nowPrice}`)
 }
 
 export async function subscribeAll(socket) {
