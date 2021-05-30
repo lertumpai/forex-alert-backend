@@ -10,7 +10,7 @@ import Jobs from './domain/jobs'
 
 import pkg from '../package'
 import { onError } from './error'
-import { startSocketProductPrice, subscribeAll, startQueueProcess, task } from './domain/jobs/utils/jobs'
+import { startSocketProductPrice, subscribeAll, startQueueProcess, task, delKeyTask } from './domain/jobs/utils/jobs'
 import './database/mongo/connection'
 
 const WebSocket = require('ws')
@@ -43,6 +43,7 @@ socket.on('open', async () => {
   await subscribeAll(socket)
   startSocketProductPrice(socket)
   task.start()
+  delKeyTask.start()
 })
 
 startQueueProcess()

@@ -90,6 +90,13 @@ export const task = cron.schedule(`*/${Number(process.env.JOB_TIME)/1000} * * * 
   scheduled: false
 })
 
+export const delKeyTask = cron.schedule(`* * */${Number(process.env.JOB_TIME)/1000} * * *`, async () =>  {
+  const keys = await redis.keys('bq:alertJob*')
+  await redis.del(keys)
+}, {
+  scheduled: false
+})
+
 export function startSocketProductPrice(socket) {
   socket.on('message', async payload => {
     const data = JSON.parse(payload).data
