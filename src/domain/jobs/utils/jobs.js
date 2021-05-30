@@ -1,3 +1,5 @@
+import cron from 'node-cron'
+
 import redis from '../../../database/redis/connnection'
 
 import { Product } from '../../../database/mongo/product'
@@ -36,7 +38,7 @@ function comparePrice(nowPrice, condition, alertPrice) {
 }
 
 async function checkAndPushMessage(data) {
-  // log(data)
+  log(data)
   const product = await Product.findByResultSymbol(data[0])
   const alerts = await Alert.findAlert({ productId: product.id })
   await Promise.all(alerts.map(async alert => {
@@ -49,15 +51,15 @@ async function checkAndPushMessage(data) {
   }))
 }
 
-export function job() {
-  setInterval(async () => {
-    const products = await redis.hgetall('products')
-    await Promise.all(Object.entries(products).map(checkAndPushMessage))
-  }, Number(process.env.JOB_TIME) || 1000)
-}
+export const task = cron.schedule(`*/${Number(process.env.JOB_TIME)/1000} * * * * *`, async () =>  {
+  const products = await redis.hgetall('products')
+  await Promise.all(Object.entries(products).map(checkAndPushMessage))
+}, {
+  scheduled: false
+})
 
-export function startSocketProductPrices(socket) {
-  console.log('start socketaa')
+export function subscribeAndStartSocketProductPrice(socket) {
+  subscribeAll(socket)
   socket.on('message', async payload => {
     const data = JSON.parse(payload).data
     if (data) {

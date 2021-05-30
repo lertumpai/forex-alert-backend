@@ -6,11 +6,11 @@ import bodyParser from 'body-parser'
 import User from './domain/user'
 import Product from './domain/product'
 import Alert from './domain/alert'
-import Socket from './domain/socket'
+import Jobs from './domain/jobs'
 
 import pkg from '../package'
 import { onError } from './error'
-import { startSocketProductPrices, job } from './domain/socket/utils/socket'
+import { subscribeAndStartSocketProductPrice } from './domain/jobs/utils/jobs'
 import './database/mongo/connection'
 
 const WebSocket = require('ws')
@@ -18,8 +18,8 @@ const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
 
 socket.on('open', () => {
   console.log('Open Socket')
+  subscribeAndStartSocketProductPrice(socket)
 })
-startSocketProductPrices(socket)
 
 const app = express()
 const port = 5000
@@ -52,7 +52,7 @@ app.get('/check', (req, res) => {
 app.use('/users', User)
 app.use('/products', Product)
 app.use('/alerts', Alert)
-app.use('/socket', Socket)
+app.use('/jobs', Jobs)
 
 app.use(onError)
 

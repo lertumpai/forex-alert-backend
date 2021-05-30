@@ -4,3 +4,4 @@ MONGO_URI=mongodb://localhost:27017/forex_alert
 COOKIE_SECURE=true
 REDIS_HOST=localhost
 REDIS_PORT=6379
+JOB_TIME=2000
