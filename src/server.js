@@ -10,16 +10,40 @@ import Jobs from './domain/jobs'
 
 import pkg from '../package'
 import { onError } from './error'
-import { subscribeAndStartSocketProductPrice } from './domain/jobs/utils/jobs'
+import { subscribeAndStartSocketProductPrice, startQueueProcess } from './domain/jobs/utils/jobs'
 import './database/mongo/connection'
 
 const WebSocket = require('ws')
 const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
 
+import Arena from 'bull-arena'
+import Bee from 'bee-queue'
+
+const arena = Arena({
+  Bee,
+  queues: [
+    {
+      name: 'alertJob',
+      hostId: 'Queue for check and alert forex price',
+      type: 'bee',
+      prefix: 'bq',
+      redis: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+      },
+    },
+  ],
+}, {
+  basePath: '/arena',
+  disableListen: true,
+})
+
 socket.on('open', () => {
   console.log('Open Socket')
   subscribeAndStartSocketProductPrice(socket)
 })
+
+startQueueProcess()
 
 const app = express()
 const port = 5000
@@ -39,6 +63,8 @@ app.use(
   bodyParser.urlencoded({ extended: true }),
   cookieParser(),
 )
+
+app.use('/', arena)
 
 app.use((req, res, next) => {
   req.finnhub = { socket }
