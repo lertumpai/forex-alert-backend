@@ -90,7 +90,7 @@ export const task = cron.schedule(`*/${Number(process.env.JOB_TIME)/1000} * * * 
   scheduled: false
 })
 
-export const delKeyTask = cron.schedule(`* */10 * * * *`, async () =>  {
+export const delKeyTask = cron.schedule(`*/10 * * * *`, async () =>  {
   const keys = await redis.keys('bq:alertJob*')
   await redis.del(keys)
 }, {
