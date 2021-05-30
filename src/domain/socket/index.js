@@ -28,15 +28,12 @@ router.post('/unsubscribe', verifyToken, async (req, res) => {
 })
 
 router.post('/start', verifyToken, async (req, res) => {
-  const { finnhub } = req
-
   if (!isStart) {
-    startSocket(finnhub.socket)
     job()
     isStart = true
   }
 
-  res.json('start socket')
+  res.json('start jobs')
 })
 
 export default router

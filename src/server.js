@@ -10,6 +10,7 @@ import Socket from './domain/socket'
 
 import pkg from '../package'
 import { onError } from './error'
+import { startSocketProductPrices, job } from './domain/socket/utils/socket'
 import './database/mongo/connection'
 
 const WebSocket = require('ws')
@@ -17,6 +18,8 @@ const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
 
 socket.on('open', () => {
   console.log('Open Socket')
+  startSocketProductPrices(socket)
+  job()
 })
 
 const app = express()

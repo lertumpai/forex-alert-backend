@@ -56,7 +56,7 @@ export function job() {
   }, Number(process.env.JOB_TIME) || 1000)
 }
 
-export function startSocket(socket) {
+export function startSocketProductPrices(socket) {
   socket.on('message', async payload => {
     const data = JSON.parse(payload).data
     if (data) {
