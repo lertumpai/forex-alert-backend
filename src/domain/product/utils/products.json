@@ -13,5 +13,55 @@
     "name": "BITCOIN",
     "symbol": "BINANCE:BTCUSDT",
     "resultSymbol": "BINANCE:BTCUSDT"
+  },
+  {
+    "name": "TRIAS/USDT",
+    "symbol": "KUCOIN:TRIAS-USDT",
+    "resultSymbol": "KUCOIN:TRIAS-USDT"
+  },
+  {
+    "name": "ETHUSDT",
+    "symbol": "BINANCE:ETHUSDT",
+    "resultSymbol": "BINANCE:ETHUSDT"
+  },
+  {
+    "name": "BNBUSDT",
+    "symbol": "BINANCE:BNBUSDT",
+    "resultSymbol": "BINANCE:BNBUSDT"
+  },
+  {
+    "name": "BELUSDT",
+    "symbol": "BINANCE:BELUSDT",
+    "resultSymbol": "BINANCE:BELUSDT"
+  },
+  {
+    "name": "WANUSDT",
+    "symbol": "BINANCE:WANUSDT",
+    "resultSymbol": "BINANCE:WANUSDT"
+  },
+  {
+    "name": "IOSTUSDT",
+    "symbol": "BINANCE:IOSTUSDT",
+    "resultSymbol": "BINANCE:IOSTUSDT"
+  },
+  {
+    "name": "XRPUSDT",
+    "symbol": "BINANCE:XRPUSDT",
+    "resultSymbol": "BINANCE:XRPUSDT"
+  },
+  {
+    "name": "ZILUSDT",
+    "symbol": "BINANCE:ZILUSDT",
+    "resultSymbol": "BINANCE:ZILUSDT"
+  },
+  {
+    "name": "ADAUSDT",
+    "symbol": "BINANCE:ADAUSDT",
+    "resultSymbol": "BINANCE:ADAUSDT"
+  },
+  {
+    "name": "MANAUSDT",
+    "symbol": "BINANCE:MANAUSDT",
+    "resultSymbol": "BINANCE:MANAUSDT"
   }
 ]
