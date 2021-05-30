@@ -90,8 +90,7 @@ export const task = cron.schedule(`*/${Number(process.env.JOB_TIME)/1000} * * * 
   scheduled: false
 })
 
-export function subscribeAndStartSocketProductPrice(socket) {
-  subscribeAll(socket)
+export function startSocketProductPrice(socket) {
   socket.on('message', async payload => {
     const data = JSON.parse(payload).data
     if (data) {
