@@ -39,7 +39,6 @@ function comparePrice(nowPrice, condition, alertPrice) {
 }
 
 async function checkAndPushMessage({ productResultSymbol, nowPrice }) {
-  log({ nowPrice, productResultSymbol })
   const product = await Product.findByResultSymbol(productResultSymbol)
   const alerts = await Alert.findAlert({ productId: product.id })
   await Promise.all(alerts.map(async alert => {
@@ -97,7 +96,10 @@ export function startSocketProductPrice(socket) {
   socket.on('message', async payload => {
     const data = payload ? JSON.parse(payload).data : null
     if (data) {
-      await Promise.all(data.map(({ s, p }) => redis.hset('products', s, p)))
+      await Promise.all(data.map(({ s, p }) => {
+        log({ nowPrice: p, productResultSymbol: s })
+        return redis.hset('products', s, p)
+      }))
     }
   })
 }
