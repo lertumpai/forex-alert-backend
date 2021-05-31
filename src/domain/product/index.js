@@ -33,6 +33,11 @@ router.get('/price', verifyToken, async (req, res) => {
   res.json({ price, name: product.name, id: productId })
 })
 
+router.get('/prices', verifyToken, async (req, res) => {
+  const price = await redis.hgetall('products')
+  res.json(price)
+})
+
 router.delete('/:id', verifyToken, async (req, res, next) => {
   try {
     const { id } = req.params

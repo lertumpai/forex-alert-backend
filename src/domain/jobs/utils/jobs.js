@@ -97,7 +97,7 @@ export async function deleteJobKeys() {
 
 export function startSocketProductPrice(socket) {
   socket.on('message', async payload => {
-    const data = JSON.parse(payload).data
+    const data = payload ? JSON.parse(payload).data : null
     if (data) {
       await Promise.all(data.map(({ s, p }) => redis.hset('products', s, p)))
     }
