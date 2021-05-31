@@ -1,4 +1,3 @@
-import cron from 'node-cron'
 import Queue from 'bee-queue'
 
 import redis from '../../../database/redis/connnection'
@@ -56,14 +55,16 @@ const alertJobs = {}
 
 export async function createAlertJobs() {
   const products = await Product.findAll()
-  return products.forEach(product => {
+  return products.map(product => {
     const { resultSymbol } = product
-    alertJobs[resultSymbol] = new Queue(`alertJob:${resultSymbol}`, {
+    const jobName = `alertJob:${resultSymbol}`
+    alertJobs[resultSymbol] = new Queue(jobName, {
       redis: {
         host: process.env.REDIS_HOST || 'localhost',
         port: process.env.REDIS_PORT || 6379,
       },
     })
+    return jobName
   })
 }
 

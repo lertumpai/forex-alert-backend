@@ -26,7 +26,7 @@ router.post('/addAlertJobs', verifyKey, async (req, res) => {
   res.json('Success add alert jobs')
 })
 
-router.post('/addAlertJobs', verifyKey, async (req, res) => {
+router.post('/deleteJobKeys', verifyKey, async (req, res) => {
   await deleteJobKeys()
   res.json('Success delete job keys')
 })
