@@ -38,8 +38,7 @@ function comparePrice(nowPrice, condition, alertPrice) {
   }
 }
 
-async function checkAndPushMessage(productResultSymbol) {
-  const nowPrice = await redis.hget('products', productResultSymbol)
+async function checkAndPushMessage({ productResultSymbol, nowPrice }) {
   log({ nowPrice, productResultSymbol })
   const product = await Product.findByResultSymbol(productResultSymbol)
   const alerts = await Alert.findAlert({ productId: product.id })
@@ -51,51 +50,49 @@ async function checkAndPushMessage(productResultSymbol) {
       await Alert.success(alert.id)
     }
   }))
-
-  const jobsCount = await redis.llen('bq:alertJob:waiting')
-  if (Number(jobsCount) <= 0) {
-    task.start()
-  }
 }
 
-const alertJob = new Queue('alertJob', {
-  redis: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379,
-  },
-})
+const alertJobs = {}
 
-export async function addAlertJob(data) {
-  const jobsCount = await redis.llen('bq:alertJob:waiting')
-  if (Number(jobsCount) >= Number(process.env.LIMIT_ALERT_QUEUE)) {
-    task.stop()
-  }
-
-  return alertJob.createJob({ productResultSymbol: data[0] }).save()
-}
-
-export function startQueueProcess() {
-  console.log('Start Alert Queue')
-  alertJob.process(async (job, done) => {
-    const { productResultSymbol } = job.data
-    await checkAndPushMessage(productResultSymbol)
-    return done()
+export async function createAlertJobs() {
+  const products = await Product.findAll()
+  return products.forEach(product => {
+    const { resultSymbol } = product
+    alertJobs[resultSymbol] = new Queue(`alertJob:${resultSymbol}`, {
+      redis: {
+        host: process.env.REDIS_HOST || 'localhost',
+        port: process.env.REDIS_PORT || 6379,
+      },
+    })
   })
 }
 
-export const task = cron.schedule(`*/${Number(process.env.JOB_TIME)/1000} * * * * *`, async () =>  {
-  const products = await redis.hgetall('products')
-  await Promise.all(Object.entries(products).map(addAlertJob))
-}, {
-  scheduled: false
-})
+export function startQueueProcess() {
+  console.log('Start AlertJobs Queue')
+  Object
+    .values(alertJobs)
+    .forEach(alertJob => {
+      alertJob.process(async (job, done) => {
+        await checkAndPushMessage(job.data)
+        return done()
+      })
+    })
+}
 
-export const delKeyTask = cron.schedule(`*/10 * * * *`, async () =>  {
+export async function addAlertJob(data) {
+  const [productResultSymbol, nowPrice] = data
+  return alertJobs[productResultSymbol].createJob({ productResultSymbol, nowPrice }).save()
+}
+
+export async function addAlertJobs() {
+  const products = await redis.hgetall('products')
+  return Promise.all(Object.entries(products).map(addAlertJob))
+}
+
+export async function deleteJobKeys() {
   const keys = await redis.keys('bq:alertJob*')
-  await redis.del(keys)
-}, {
-  scheduled: false
-})
+  return redis.del(keys)
+}
 
 export function startSocketProductPrice(socket) {
   socket.on('message', async payload => {

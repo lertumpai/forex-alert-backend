@@ -2,8 +2,8 @@ import express from 'express'
 
 const router = express.Router()
 
-import { verifyToken } from '../user/authentication/token'
-import { subscribeAll, unsubscribeAll, task } from './utils/jobs'
+import { verifyToken, verifyKey } from '../user/authentication/token'
+import { subscribeAll, unsubscribeAll, addAlertJobs, deleteJobKeys } from './utils/jobs'
 
 router.get('/check', (req, res) => {
   res.json('Socket is ready')
@@ -11,28 +11,24 @@ router.get('/check', (req, res) => {
 
 router.post('/subscribe', verifyToken, async (req, res) => {
   const { finnhub } = req
-
   await subscribeAll(finnhub.socket)
-
-  res.json('subscribe success')
+  res.json('Success subscribe')
 })
 
 router.post('/unsubscribe', verifyToken, async (req, res) => {
   const { finnhub } = req
-
   await unsubscribeAll(finnhub.socket)
-
-  res.json('unsubscribe success')
+  res.json('Success unsubscribe')
 })
 
-router.post('/start', verifyToken, async (req, res) => {
-  task.start()
-  res.json('start jobs')
+router.post('/addAlertJobs', verifyKey, async (req, res) => {
+  await addAlertJobs()
+  res.json('Success add alert jobs')
 })
 
-router.post('/stop', verifyToken, async (req, res) => {
-  task.stop()
-  res.json('stop jobs')
+router.post('/addAlertJobs', verifyKey, async (req, res) => {
+  await deleteJobKeys()
+  res.json('Success delete job keys')
 })
 
 export default router

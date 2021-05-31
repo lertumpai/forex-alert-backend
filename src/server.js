@@ -10,7 +10,7 @@ import Jobs from './domain/jobs'
 
 import pkg from '../package'
 import { onError } from './error'
-import { startSocketProductPrice, subscribeAll, startQueueProcess, task, delKeyTask } from './domain/jobs/utils/jobs'
+import { startSocketProductPrice, subscribeAll, startQueueProcess, createAlertJobs } from './domain/jobs/utils/jobs'
 import './database/mongo/connection'
 
 const WebSocket = require('ws')
@@ -23,7 +23,7 @@ const arena = Arena({
   Bee,
   queues: [
     {
-      name: 'alertJob',
+      name: 'alertJobs',
       hostId: 'Queue for check and alert forex price',
       type: 'bee',
       prefix: 'bq',
@@ -42,11 +42,9 @@ socket.on('open', async () => {
   console.log('Open Socket')
   await subscribeAll(socket)
   startSocketProductPrice(socket)
-  task.start()
-  delKeyTask.start()
+  await createAlertJobs()
+  startQueueProcess()
 })
-
-startQueueProcess()
 
 const app = express()
 const port = 5000
