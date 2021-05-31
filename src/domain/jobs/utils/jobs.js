@@ -1,4 +1,5 @@
 import Queue from 'bee-queue'
+require('events').EventEmitter.defaultMaxListeners = 0
 
 import redis from '../../../database/redis/connnection'
 
@@ -59,10 +60,7 @@ export async function createAlertJobs() {
     const { resultSymbol } = product
     const jobName = `alertJob:${resultSymbol}`
     alertJobs[resultSymbol] = new Queue(jobName, {
-      redis: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: process.env.REDIS_PORT || 6379,
-      },
+      redis,
     })
     return jobName
   })

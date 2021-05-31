@@ -1,6 +1,6 @@
 {
   "name": "forex-alert-backend",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "main": "server.js",
   "repository": "https://github.com/lertumpai/forex-alert-backend.git",
   "author": "ninew <new-sorawit@outlook.com>",
@@ -22,9 +22,9 @@
     "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "finnhub": "^1.2.1",
-    "ioredis": "^4.27.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.11",
+    "redis": "^3.1.2",
     "request": "^2.88.2",
     "ws": "^7.4.6"
   },
