@@ -52,4 +52,16 @@ router.get('/test', async (req, res) => {
   res.json('Success delete job keys')
 })
 
+router.get('/testPrice/:product/:price', async (req, res) => {
+  const { price, product } = req.params
+  await redis.set('price', price)
+  await redis.set('product', product)
+  res.json('Success delete job keys')
+})
+
+router.post('/test', async (req, res) => {
+  console.log(req.body)
+  res.json('Success delete job keys')
+})
+
 export default router
