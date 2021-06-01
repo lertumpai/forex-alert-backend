@@ -4,7 +4,7 @@ const router = express.Router()
 
 import redis from '../../database/redis/connnection'
 import { verifyToken, verifyKey } from '../user/authentication/token'
-import { subscribeAll, unsubscribeAll, addAlertJobs, deleteJobKeys, startSocketProductPrice } from './utils/jobs'
+import { subscribeAll, unsubscribeAll, addAlertJobs, deleteJobKeys, startSocketProductPrice, addProductPrice } from './utils/jobs'
 
 const WebSocket = require('ws')
 
@@ -52,15 +52,9 @@ router.get('/test', async (req, res) => {
   res.json('Success delete job keys')
 })
 
-router.get('/testPrice/:product/:price', async (req, res) => {
+router.get('/add_price/:product/:price', async (req, res) => {
   const { price, product } = req.params
-  await redis.set('price', price)
-  await redis.set('product', product)
-  res.json('Success delete job keys')
-})
-
-router.post('/test', async (req, res) => {
-  console.log(req.body)
+  await addProductPrice({ product, price })
   res.json('Success delete job keys')
 })
 

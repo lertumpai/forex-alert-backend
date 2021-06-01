@@ -92,6 +92,13 @@ export async function deleteJobKeys() {
   return redis.del(keys)
 }
 
+export async function addProductPrice({ product, price }) {
+  return Promise.all([
+    redis.hset('products', price, product),
+    redis.set('updated_price_time', new Date().toISOString())
+  ])
+}
+
 export function startSocketProductPrice(socket) {
   socket.on('message', async payload => {
     const data = payload ? JSON.parse(payload).data : null
