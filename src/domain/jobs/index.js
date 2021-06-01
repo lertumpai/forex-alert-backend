@@ -24,7 +24,7 @@ router.post('/unsubscribe', verifyToken, async (req, res) => {
   res.json('Success unsubscribe')
 })
 
-router.post('/startSocketProductPrice', verifyToken, async (req, res) => {
+router.post('/startSocketProductPrice', verifyKey, async (req, res) => {
   const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
   await subscribeAll(socket)
   await startSocketProductPrice(socket)
