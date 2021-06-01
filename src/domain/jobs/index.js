@@ -32,8 +32,8 @@ router.post('/deleteJobKeys', verifyKey, async (req, res) => {
   res.json('Success delete job keys')
 })
 
-router.get('/deleteJobKeys', async (req, res) => {
-  await deleteJobKeys()
+router.get('/test', async (req, res) => {
+  await redis.set('date', new Date().toUTCString())
   res.json('Success delete job keys')
 })
 
