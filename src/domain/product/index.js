@@ -38,6 +38,11 @@ router.get('/prices', verifyToken, async (req, res) => {
   res.json(price)
 })
 
+router.get('/updated_price_time', verifyToken, async (req, res) => {
+  const updatedPriceTime = await redis.get('updated_price_time')
+  res.json({ updatedPriceTime })
+})
+
 router.delete('/:id', verifyToken, async (req, res, next) => {
   try {
     const { id } = req.params
