@@ -98,7 +98,10 @@ export function startSocketProductPrice(socket) {
     if (data) {
       await Promise.all(data.map(({ s, p }) => {
         log({ nowPrice: p, productResultSymbol: s })
-        return redis.hset('products', s, p)
+        return Promise.all([
+          redis.hset('products', s, p),
+          redis.set('updated_price_time', new Date().toISOString())
+        ])
       }))
     }
   })
