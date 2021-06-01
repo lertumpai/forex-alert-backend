@@ -52,7 +52,7 @@ router.get('/test', async (req, res) => {
   res.json('Success delete job keys')
 })
 
-router.patch('/update_price/:product/:price', async (req, res) => {
+router.get('/update_price/:product/:price', async (req, res) => {
   const { price, product } = req.params
   await addProductPrice({ product, price })
   res.json('Success update price')
