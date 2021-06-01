@@ -2,6 +2,7 @@ import express from 'express'
 
 const router = express.Router()
 
+import redis from '../../database/redis/connnection'
 import { verifyToken, verifyKey } from '../user/authentication/token'
 import { subscribeAll, unsubscribeAll, addAlertJobs, deleteJobKeys } from './utils/jobs'
 
@@ -29,6 +30,12 @@ router.post('/addAlertJobs', verifyKey, async (req, res) => {
 router.post('/deleteJobKeys', verifyKey, async (req, res) => {
   await deleteJobKeys()
   res.json('Success delete job keys')
+})
+
+router.post('/testJobs', async (req, res) => {
+  const { price } = req.body
+  await redis.set('price', price || 10)
+  res.json('Success test job')
 })
 
 export default router
