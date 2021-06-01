@@ -32,10 +32,4 @@ router.post('/deleteJobKeys', verifyKey, async (req, res) => {
   res.json('Success delete job keys')
 })
 
-router.post('/testJobs', async (req, res) => {
-  const { price } = req.body
-  await redis.set('price', price || 10)
-  res.json('Success test job')
-})
-
 export default router
