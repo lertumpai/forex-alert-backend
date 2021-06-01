@@ -25,10 +25,17 @@ router.post('/unsubscribe', verifyToken, async (req, res) => {
 })
 
 router.post('/startSocketProductPrice', verifyKey, async (req, res) => {
-  const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
-  await subscribeAll(socket)
-  await startSocketProductPrice(socket)
-  res.json('Success start socket')
+  try {
+    console.log('Add socket')
+    const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
+    console.log('subscribeAll')
+    await subscribeAll(socket)
+    console.log('Start socket')
+    await startSocketProductPrice(socket)
+    res.json('Success start socket')
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 router.post('/addAlertJobs', verifyKey, async (req, res) => {
