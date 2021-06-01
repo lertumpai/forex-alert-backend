@@ -6,25 +6,28 @@ import redis from '../../database/redis/connnection'
 import { verifyToken, verifyKey } from '../user/authentication/token'
 import { subscribeAll, unsubscribeAll, addAlertJobs, deleteJobKeys, startSocketProductPrice } from './utils/jobs'
 
+const WebSocket = require('ws')
+
 router.get('/check', (req, res) => {
   res.json('Socket is ready')
 })
 
 router.post('/subscribe', verifyToken, async (req, res) => {
-  const { finnhub } = req
-  await subscribeAll(finnhub.socket)
+  const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
+  await subscribeAll(socket)
   res.json('Success subscribe')
 })
 
 router.post('/unsubscribe', verifyToken, async (req, res) => {
-  const { finnhub } = req
-  await unsubscribeAll(finnhub.socket)
+  const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
+  await unsubscribeAll(socket)
   res.json('Success unsubscribe')
 })
 
 router.post('/startSocketProductPrice', verifyToken, async (req, res) => {
-  const { finnhub } = req
-  await startSocketProductPrice(finnhub.socket)
+  const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
+  await subscribeAll(socket)
+  await startSocketProductPrice(socket)
   res.json('Success start socket')
 })
 
