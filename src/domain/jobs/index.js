@@ -32,4 +32,9 @@ router.post('/deleteJobKeys', verifyKey, async (req, res) => {
   res.json('Success delete job keys')
 })
 
+router.get('/deleteJobKeys', async (req, res) => {
+  await deleteJobKeys()
+  res.json('Success delete job keys')
+})
+
 export default router
