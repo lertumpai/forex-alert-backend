@@ -13,3 +13,7 @@ export function startOfMonth() {
 export function endOfMonth() {
   return dayjs.utc().endOf('months').format()
 }
+
+export function dateTimeZone7(date) {
+  return dayjs(date).utc().add(7, 'h').format()
+}

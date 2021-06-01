@@ -6,6 +6,7 @@ const router = express.Router()
 import redis from '../../database/redis/connnection'
 import { verifyToken } from '../user/authentication/token'
 import { Product } from '../../database/mongo/product'
+import { dateTimeZone7 } from '../../utils/date'
 
 router.get('/check', (req, res) => {
   res.json('Product is ready')
@@ -40,7 +41,7 @@ router.get('/prices', verifyToken, async (req, res) => {
 
 router.get('/updated_price_time', verifyToken, async (req, res) => {
   const updatedPriceTime = await redis.get('updated_price_time')
-  res.json({ updatedPriceTime })
+  res.json({ updatedPriceTime: dateTimeZone7(updatedPriceTime) })
 })
 
 router.delete('/:id', verifyToken, async (req, res, next) => {
