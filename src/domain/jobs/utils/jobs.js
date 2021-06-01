@@ -94,7 +94,7 @@ export async function deleteJobKeys() {
 
 export async function addProductPrice({ product, price }) {
   return Promise.all([
-    redis.hset('products', price, product),
+    redis.hset('products', product, price),
     redis.set('updated_price_time', new Date().toISOString())
   ])
 }
