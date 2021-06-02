@@ -79,7 +79,9 @@ export function startQueueProcess() {
 
 export async function addAlertJob(data) {
   const [productResultSymbol, nowPrice] = data
-  return alertJobs[productResultSymbol].createJob({ productResultSymbol, nowPrice }).save()
+  return alertJobs[productResultSymbol]
+    ? alertJobs[productResultSymbol].createJob({ productResultSymbol, nowPrice }).save()
+    : null
 }
 
 export async function addAlertJobs() {

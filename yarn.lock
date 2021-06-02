@@ -4351,6 +4351,13 @@ term-size@^2.1.0:
   resolved "https://registry.yarnpkg.com/term-size/-/term-size-2.2.1.tgz#2a6a54840432c2fb6320fea0f415531e90189f54"
   integrity sha512-wK0Ri4fOGjv/XPy8SBHZChl8CM7uMc5VML7SqiQ0zG7+J5Vr+RMQDoHa2CNT6KHUnTGIXH34UDMkPzAUyapBZg==
 
+thaibulksms-api@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/thaibulksms-api/-/thaibulksms-api-1.0.7.tgz#f6ea5a3a0715aac1228bd1a5e0a0a0078b52e81d"
+  integrity sha512-O/G06nyw66rOpH3JCdt+nLTHvgnmdpZSGCtp0FjjzL7BMUyaKeUrc5g0Mjcw0CDu5V4WhVJGzB2Vp4aFqGgsAQ==
+  dependencies:
+    axios "^0.21.1"
+
 to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"

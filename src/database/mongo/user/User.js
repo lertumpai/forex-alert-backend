@@ -4,19 +4,13 @@ import Dao from '../dao'
 import { NOT_FOUND_ERROR } from '../../../error'
 import { now } from '../../../utils/date'
 
-const ProfileSchema = new mongoose.Schema({
-  name: String,
-  birthday: Date,
-  status: String,
-  image: { type: mongoose.Types.ObjectId, ref: 'UploadProfile' },
-}, { _id: false })
-
 const UserSchema = new mongoose.Schema({
   username: { type: String, unique: true },
   password: String,
   active: { type: Boolean, default: true },
   line_access_token: String,
   line_user_id: String,
+  mobileNo: String,
   createdAt: Date,
   updatedAt: Date,
   deletedAt: Date,
@@ -38,7 +32,7 @@ export default class UserClass extends Dao {
     return User.create({ username, password, createdAt: date, updatedAt: date })
   }
 
-  async updateProfile(id, { line_access_token, line_user_id }) {
+  async updateProfile(id, { line_access_token, line_user_id, mobileNo }) {
     const user = await User.findById(id)
 
     if (!user) {
@@ -47,6 +41,7 @@ export default class UserClass extends Dao {
 
     user.line_user_id = line_user_id || user.line_user_id
     user.line_access_token = line_access_token || user.line_access_token
+    user.mobileNo = mobileNo || user.mobileNo
     user.updated_time = now()
 
     return user.save()

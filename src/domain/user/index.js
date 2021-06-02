@@ -20,10 +20,10 @@ router.get('/', verifyToken, async (req, res) => {
 // update user
 router.patch('/', verifyToken, async (req, res, next) => {
   const { id } = req.user
-  const { line_access_token, line_user_id } = req.body
+  const { line_access_token, line_user_id, mobileNo } = req.body
 
   try {
-    const user = await User.updateProfile(id, { line_access_token, line_user_id })
+    const user = await User.updateProfile(id, { line_access_token, line_user_id, mobileNo })
     res.json(user)
   } catch (e) {
     next(e)
