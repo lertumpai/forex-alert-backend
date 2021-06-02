@@ -55,7 +55,7 @@ app.use('/jobs', Jobs)
 socket.on('open', async () => {
   console.log('Open Socket')
   await subscribeAll(socket)
-  // startSocketProductPrice(socket)
+  startSocketProductPrice(socket)
   const jobNames = await createAlertJobs()
 
   const arena = Arena({
