@@ -67,14 +67,18 @@ export async function createAlertJobs() {
 
 export function startQueueProcess() {
   console.log('Start AlertJobs Queue')
-  Object
-    .values(alertJobs)
-    .forEach(alertJob => {
-      alertJob.process(async (job, done) => {
-        await checkAndPushMessage(job.data)
-        return done()
+  try {
+    Object
+      .values(alertJobs)
+      .forEach(alertJob => {
+        alertJob.process(async (job, done) => {
+          await checkAndPushMessage(job.data)
+          return done()
+        })
       })
-    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export async function addAlertJob(data) {

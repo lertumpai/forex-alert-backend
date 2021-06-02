@@ -33,11 +33,15 @@ export async function pushMessage({ user, product, alert }) {
   const sms = thaibulksmsApi.sms(options)
 
   const message = `${name} ${conditionConverter(condition)} ${price}`
-  let body = {
+  const body = {
     msisdn: mobileNo,
     message,
     sender: 'MySMS',
   }
-  await sms.sendSMS(body)
+  try {
+    await sms.sendSMS(body)
+  } catch (e) {
+    console.log(e)
+  }
   console.log(`Finish alert to ${mobileNo}`)
 }

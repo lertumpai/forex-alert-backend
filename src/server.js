@@ -38,11 +38,6 @@ app.use(
   cookieParser(),
 )
 
-app.use((req, res, next) => {
-  req.finnhub = { socket }
-  next()
-})
-
 app.get('/check', (req, res) => {
   res.json(`Server is ready ${pkg.version}`)
 })
