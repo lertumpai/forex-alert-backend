@@ -8,6 +8,7 @@ import { Alert } from '../../../database/mongo/alert'
 import { User } from '../../../database/mongo/user'
 
 import { pushMessage } from '../../../utils/line'
+import * as sms from '../../alert/utils/sms'
 
 function log({ nowPrice, productResultSymbol }) {
   console.log(`${new Date().toISOString()}: ${productResultSymbol} = ${nowPrice}`)
@@ -45,8 +46,11 @@ async function checkAndPushMessage({ productResultSymbol, nowPrice }) {
     const { price, condition, createdBy } = alert
     if (comparePrice(nowPrice, condition, price)) {
       const user = await User.findById(createdBy)
-      await pushMessage({ user, product, alert })
-      await Alert.success(alert.id)
+      await Promise.all([
+        pushMessage({ user, product, alert }),
+        Alert.success(alert.id),
+        sms.updateCredit(-1),
+      ])
     }
   }))
 }

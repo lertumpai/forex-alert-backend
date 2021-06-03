@@ -4,6 +4,7 @@ const router = express.Router()
 
 import { verifyToken } from '../user/authentication/token'
 import { startOfMonth, endOfMonth } from '../../utils/date'
+import * as sms from './utils/sms'
 
 import { Product } from '../../database/mongo/product'
 import { Alert } from '../../database/mongo/alert'
@@ -76,6 +77,25 @@ router.delete('/:id', verifyToken, async (req, res, next) => {
     const { id } = req.params
     await Alert.delete(id)
     res.status(204).end()
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.patch('/sms_credit', verifyToken, async (req, res, next) => {
+  try {
+    const { credit } = req.body
+    await sms.updateCredit(credit)
+    res.status(204).end()
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.get('/sms_credit', verifyToken, async (req, res, next) => {
+  try {
+    const credit = await sms.getCredit()
+    res.json(credit)
   } catch (e) {
     next(e)
   }
