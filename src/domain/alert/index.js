@@ -95,7 +95,7 @@ router.patch('/sms_credit', verifyToken, async (req, res, next) => {
 router.get('/sms_credit', verifyToken, async (req, res, next) => {
   try {
     const credit = await sms.getCredit()
-    res.json(credit)
+    res.json({ credit })
   } catch (e) {
     next(e)
   }
