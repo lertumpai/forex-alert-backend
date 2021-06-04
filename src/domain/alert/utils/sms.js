@@ -4,6 +4,9 @@ const SMS_CREDIT = 'sms_credit'
 export function updateCredit(credit) {
   return redis.incrby(SMS_CREDIT, credit)
 }
+export function setCredit(credit) {
+  return redis.set(SMS_CREDIT, credit)
+}
 
 export function getCredit() {
   return redis.get(SMS_CREDIT)

@@ -1,5 +1,7 @@
 import thaibulksmsApi from 'thaibulksms-api'
 
+import { setCredit, getCredit } from '../../domain/alert/utils/sms'
+
 function conditionConverter(condition) {
   switch (condition) {
     case 'gte':
@@ -31,15 +33,21 @@ export async function pushMessage({ user, product, alert }) {
   }
 
   const sms = thaibulksmsApi.sms(options)
+  const credit = await getCredit()
 
-  const message = `${name} ${conditionConverter(condition)} ${price}`
+  let message = `${name} ${conditionConverter(condition)} ${price}`
+  if (credit - 1 < 100) {
+    message += ` (credit remaining: ${credit - 1})`
+  }
+
   const body = {
     msisdn: mobileNo,
     message,
     sender: 'MySMS',
   }
   try {
-    await sms.sendSMS(body)
+    const { remaining_credit } = await sms.sendSMS(body)
+    await setCredit(remaining_credit)
   } catch (e) {
     console.log(e)
   }

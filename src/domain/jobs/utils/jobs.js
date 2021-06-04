@@ -49,7 +49,6 @@ async function checkAndPushMessage({ productResultSymbol, nowPrice }) {
       await Promise.all([
         pushMessage({ user, product, alert }),
         Alert.success(alert.id),
-        sms.updateCredit(-1),
       ])
     }
   }))
