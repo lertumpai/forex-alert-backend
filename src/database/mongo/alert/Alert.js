@@ -11,6 +11,7 @@ const AlertSchema = new mongoose.Schema({
     enum: ['gte', 'lte']
   },
   productId: { type: mongoose.Types.ObjectId, ref: 'Product' },
+  note: String,
   createdBy: { type: mongoose.Types.ObjectId, ref: 'User' },
   createdAt: Date,
   alertedAt: Date,
@@ -63,9 +64,9 @@ export default class AlertClass extends Dao {
     return Alert.find(prepareFilter, null, { createdAt: 1 })
   }
 
-  create({ price, condition, createdBy, productId }) {
+  create({ price, condition, createdBy, productId, note }) {
     const date = now()
-    return Alert.create({ price, condition, createdBy, productId, createdAt: date })
+    return Alert.create({ price, condition, createdBy, productId, note, createdAt: date })
   }
 
   async success(id) {

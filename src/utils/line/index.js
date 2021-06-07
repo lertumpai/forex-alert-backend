@@ -15,7 +15,7 @@ function conditionConverter(condition) {
 
 export async function pushMessage({ user, product, alert }) {
   const { mobileNo } = user
-  const { price, condition } = alert
+  const { price, condition, note } = alert
   const { name } = product
 
   // const client = new Client({ channelAccessToken: line_access_token })
@@ -38,6 +38,9 @@ export async function pushMessage({ user, product, alert }) {
   let message = `${name} ${conditionConverter(condition)} ${price}`
   if (credit - 1 < 100) {
     message += ` (credit remaining: ${credit - 1})`
+  }
+  if (note) {
+    message += ` (Note: ${note})`
   }
 
   const body = {

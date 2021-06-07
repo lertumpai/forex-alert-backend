@@ -62,10 +62,10 @@ router.get('/count_alert', verifyToken, async (req, res) => {
 })
 
 router.post('/', verifyToken, async (req, res, next) => {
-  const { price, condition, productId } = req.body
+  const { price, condition, productId, note } = req.body
   const { user } = req
   try {
-    const alert = await Alert.create({ price, condition, productId, createdBy: user.id })
+    const alert = await Alert.create({ price, condition, productId, note, createdBy: user.id })
     res.json(alert)
   } catch (e) {
     next(e)
