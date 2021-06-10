@@ -6,6 +6,7 @@ const router = express.Router()
 import redis from '../../database/redis/connnection'
 import { verifyToken } from '../user/authentication/token'
 import { Product } from '../../database/mongo/product'
+import { Alert } from '../../database/mongo/alert'
 import { dateTimeZone7 } from '../../utils/date'
 
 router.get('/check', (req, res) => {
@@ -48,6 +49,7 @@ router.delete('/:id', verifyToken, async (req, res, next) => {
   try {
     const { id } = req.params
     await Product.delete(id)
+    await Alert.deleteByProduct(id)
     res.status(204).end()
   } catch (e) {
     next(e)

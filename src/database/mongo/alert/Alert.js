@@ -84,4 +84,8 @@ export default class AlertClass extends Dao {
   delete(id) {
     return Alert.deleteOne({ _id: id })
   }
+
+  deleteByProduct(productId) {
+    return Alert.deleteMany({ productId })
+  }
 }
