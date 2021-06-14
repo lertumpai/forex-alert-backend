@@ -36,8 +36,11 @@ router.get('/price', verifyToken, async (req, res) => {
 })
 
 router.get('/prices', verifyToken, async (req, res) => {
-  const price = await redis.hgetall('products')
-  res.json(price)
+  const productPriceObjects = await redis.hgetall('products')
+  const productPrices = Object
+    .entries(productPriceObjects)
+    .map(([product, price]) => ({ product, price }))
+  res.json(productPrices)
 })
 
 router.get('/updated_price_time', verifyToken, async (req, res) => {
