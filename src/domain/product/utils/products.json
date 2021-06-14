@@ -5,9 +5,19 @@
     "resultSymbol": "OANDA:XAU_USD"
   },
   {
+    "name": "Gold-mt4",
+    "symbol": "Gold-mt4",
+    "resultSymbol": "Gold-mt4"
+  },
+  {
     "name": "Nasda100",
     "symbol": "^NDX",
     "resultSymbol": "OANDA:NAS100_USD"
+  },
+  {
+    "name": "Nasda100-mt4",
+    "symbol": "Nasda100-mt4",
+    "resultSymbol": "Nasda100-mt4"
   },
   {
     "name": "BITCOIN",

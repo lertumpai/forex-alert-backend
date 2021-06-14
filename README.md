@@ -21,7 +21,7 @@ THAI_BULK_KEY
 1. unsubscribe all
 api /socket/unsubscribe
 2. remove product
-3. unsubscribe all
+3. subscribe all
 api /socket/subscribe
 ```
 
