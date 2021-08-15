@@ -98,6 +98,9 @@ export async function addAlertJobs() {
 
 export async function deleteJobKeys() {
   const keys = await redis.keys('bq:alertJob*')
+  if (!keys.length) {
+    return null
+  }
   return redis.del(keys)
 }
 
