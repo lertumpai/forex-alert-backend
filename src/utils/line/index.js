@@ -46,7 +46,7 @@ export async function pushMessage({ user, product, alert }) {
   const body = {
     msisdn: mobileNo,
     message,
-    sender: 'MySMS',
+    sender: 'AlertPrice',
   }
   try {
     const { remaining_credit } = await sms.sendSMS(body)
