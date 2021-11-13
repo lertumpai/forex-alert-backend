@@ -13,9 +13,6 @@ import { onError } from './error'
 import { startSocketProductPrice, subscribeAll, startQueueProcess, createAlertJobs } from './domain/jobs/utils/jobs'
 import './database/mongo/connection'
 
-const WebSocket = require('ws')
-const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
-
 import Arena from 'bull-arena'
 import Bee from 'bee-queue'
 
@@ -47,7 +44,32 @@ app.use('/products', Product)
 app.use('/alerts', Alert)
 app.use('/jobs', Jobs)
 
-socket.on('open', async () => {
+// socket.on('open', async () => {
+//   const jobNames = await createAlertJobs()
+//
+//   const arena = Arena({
+//     Bee,
+//     queues: jobNames.map(jobName => {
+//       return {
+//         name: jobName,
+//         hostId: `Queue for check and alert ${jobName} price`,
+//         type: 'bee',
+//         prefix: 'bq',
+//         redis: {
+//           host: process.env.REDIS_HOST,
+//           port: process.env.REDIS_PORT,
+//         },
+//       }
+//     })
+//   }, {
+//     basePath: '/arena',
+//     disableListen: true,
+//   })
+//   app.use('/', arena)
+//   startQueueProcess()
+// })
+
+async function q() {
   const jobNames = await createAlertJobs()
 
   const arena = Arena({
@@ -70,10 +92,12 @@ socket.on('open', async () => {
   })
   app.use('/', arena)
   startQueueProcess()
-})
 
-app.use(onError)
+  app.use(onError)
 
-app.listen(port, () => {
-  console.log('Server is start')
-})
+  app.listen(port, () => {
+    console.log('Server is start')
+  })
+}
+
+q()
