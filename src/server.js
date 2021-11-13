@@ -13,6 +13,9 @@ import { onError } from './error'
 import { startSocketProductPrice, subscribeAll, startQueueProcess, createAlertJobs } from './domain/jobs/utils/jobs'
 import './database/mongo/connection'
 
+const WebSocket = require('ws')
+const socket = new WebSocket('wss://ws.finnhub.io?token=c2nkbtaad3i8g7sr9tcg')
+
 import Arena from 'bull-arena'
 import Bee from 'bee-queue'
 
@@ -69,7 +72,7 @@ app.use('/jobs', Jobs)
 //   startQueueProcess()
 // })
 
-async function q() {
+async function startServer() {
   const jobNames = await createAlertJobs()
 
   const arena = Arena({
@@ -100,4 +103,4 @@ async function q() {
   })
 }
 
-q()
+startServer
