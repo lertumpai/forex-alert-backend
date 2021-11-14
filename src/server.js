@@ -75,26 +75,28 @@ app.use('/jobs', Jobs)
 async function startServer() {
   const jobNames = await createAlertJobs()
 
-  const arena = Arena({
-    Bee,
-    queues: jobNames.map(jobName => {
-      return {
-        name: jobName,
-        hostId: `Queue for check and alert ${jobName} price`,
-        type: 'bee',
-        prefix: 'bq',
-        redis: {
-          host: process.env.REDIS_HOST,
-          port: process.env.REDIS_PORT,
-        },
-      }
+  if (jobNames.length) {
+    const arena = Arena({
+      Bee,
+      queues: jobNames.map(jobName => {
+        return {
+          name: jobName,
+          hostId: `Queue for check and alert ${jobName} price`,
+          type: 'bee',
+          prefix: 'bq',
+          redis: {
+            host: process.env.REDIS_HOST,
+            port: process.env.REDIS_PORT,
+          },
+        }
+      })
+    }, {
+      basePath: '/arena',
+      disableListen: true,
     })
-  }, {
-    basePath: '/arena',
-    disableListen: true,
-  })
-  app.use('/', arena)
-  startQueueProcess()
+    app.use('/', arena)
+    startQueueProcess()
+  }
 
   app.use(onError)
 
@@ -103,4 +105,4 @@ async function startServer() {
   })
 }
 
-startServer
+startServer()
