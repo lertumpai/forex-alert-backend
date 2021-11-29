@@ -34,6 +34,7 @@ router.get('/', verifyToken, async (req, res) => {
     return {
       id: alert.id,
       price: alert.price,
+      note: alert.note,
       condition: conditions.filter(condition => condition.value === alert.condition)[0]['symbol'],
       productName: product.name,
     }
