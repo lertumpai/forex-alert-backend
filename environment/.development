@@ -1,6 +1,6 @@
 NODE_ENV=development
 PRIVATE_KEY=n@e#w$f%a^r&m*m(e)m_o+r1i2z3e4567890
-MONGO_URI=mongodb://localhost:27017/forex_alert
+MONGO_URI=mongodb://lertumpai:sorawit5171718@34.124.237.231:27017/forex-alert
 COOKIE_SECURE=true
 REDIS_HOST=localhost
 REDIS_PORT=6379
