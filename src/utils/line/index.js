@@ -46,7 +46,7 @@ export async function pushMessage({ user, product, alert }) {
   const body = {
     msisdn: mobileNo,
     message,
-    sender: 'AlertPrice',
+    sender: process.env.SENDER_NAME || 'TFEX_ALERT',
   }
   try {
     const { remaining_credit } = await sms.sendSMS(body)
