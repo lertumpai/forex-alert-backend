@@ -13,7 +13,7 @@ function conditionConverter(condition) {
   }
 }
 
-export async function pushMessage({ user, product, alert }) {
+export async function pushMessage({ user, product, alert, nowPrice }) {
   const { mobileNo } = user
   const { price, condition, note } = alert
   const { name } = product
@@ -35,12 +35,12 @@ export async function pushMessage({ user, product, alert }) {
   const sms = thaibulksmsApi.sms(options)
   const credit = await getCredit()
 
-  let message = `${name} ${conditionConverter(condition)} ${price}`
-  if (credit - 1 < 100) {
-    message += ` (credit remaining: ${credit - 1})`
-  }
+  let message = `${name} ${conditionConverter(condition)} ${price} (current = ${nowPrice})`
   if (note) {
     message += ` (Note: ${note})`
+  }
+  if (credit - 1 < 100) {
+    message += ` (credit remaining: ${credit - 1})`
   }
 
   const body = {

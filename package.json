@@ -1,6 +1,6 @@
 {
   "name": "forex-alert-backend",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "main": "server.js",
   "repository": "https://github.com/lertumpai/forex-alert-backend.git",
   "author": "ninew <new-sorawit@outlook.com>",

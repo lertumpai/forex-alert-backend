@@ -47,7 +47,7 @@ async function checkAndPushMessage({ productResultSymbol, nowPrice }) {
     if (comparePrice(nowPrice, condition, price)) {
       const user = await User.findById(createdBy)
       await Promise.all([
-        pushMessage({ user, product, alert }),
+        pushMessage({ user, product, alert, nowPrice }),
         Alert.success(alert.id),
       ])
     }
